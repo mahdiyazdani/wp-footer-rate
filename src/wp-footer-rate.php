@@ -52,13 +52,13 @@ class Rate {
 	private string $slug;
 
 	/**
-	 * Name of the option to retrieve.
+	 * Name of the transient to retrieve.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	private static $option_name;
+	private static $transient_name;
 
 	/**
 	 * Whether the notice can be shown.
@@ -109,7 +109,7 @@ class Rate {
 		$this->type        = sanitize_text_field( $type );
 		$this->expiration  = sanitize_text_field( $expiration );
 		$this->do_render   = $do_render;
-		self::$option_name = str_replace( '-', '_', $slug ) . '_rated';
+		self::$transient_name = str_replace( '-', '_', $slug ) . '_rated';
 
 		$this->init();
 	}
@@ -145,7 +145,7 @@ class Rate {
 		// Determine the page direction.
 		$class_name = is_rtl() ? 'alignright' : 'alignleft';
 
-		if ( ! get_transient( self::$option_name ) ) {
+		if ( ! get_transient( self::$transient_name ) ) {
 
 			printf(
 			/* translators: 1: Open paragraph tag, 2: Plugin name, 3: Five stars, 4: Close paragraph tag. */
@@ -160,7 +160,7 @@ class Rate {
 				document.getElementById( 'wp-footer-rate-link' ).addEventListener( 'click', async ( e ) => {
 					const $this = e.target;
 					const data = new FormData();
-					data.append( '_ajax_nonce', '<?php echo wp_create_nonce( self::$option_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>' );
+					data.append( '_ajax_nonce', '<?php echo wp_create_nonce( self::$transient_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>' );
 					data.append( 'action', 'wp_footer_rate_rated' );
 					try {
 						await fetch(
