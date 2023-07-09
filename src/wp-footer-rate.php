@@ -179,7 +179,6 @@ class Rate {
 					}
 				} );
 			</script>
-			<style>#wpfooter{display:block !important;}</style>
 			<?php
 		} else {
 			printf(
@@ -190,6 +189,8 @@ class Rate {
 				'</p>'
 			);
 		}
+
+		?><style>#wpfooter{display:block !important;}</style><?php
 	}
 
 	/**
