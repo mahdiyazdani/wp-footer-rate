@@ -96,7 +96,7 @@ class Rate {
 	 * @param string $slug       The slug of the theme/plugin.
 	 * @param string $name       Theme/Plugin name.
 	 * @param bool   $do_render  Optional. Determine where the notice can be displayed.
-	 * @param string $type       Optional. Determine whether the notice is meant for a theme or plugin.
+	 * @param string $type       Optional. Determine whether the notice is meant for a theme, plugin, or woo.
 	 * @param string $expiration Optional. Time until expiration in seconds.
 	 *
 	 * @return void
@@ -147,12 +147,18 @@ class Rate {
 
 		if ( ! get_transient( self::$transient_name ) ) {
 
+			if ( 'woo' === $this->type ) {
+				$review_url = 'https://woo.com/products/' . esc_html( $this->slug ) . '/#reviews';
+			} else {
+				$review_url = 'https://wordpress.org/support/' . esc_html( $this->type ) . '/' . esc_html( $this->slug ) . '/reviews?filter=5#new-post';
+			}
+
 			printf(
 			/* translators: 1: Open paragraph tag, 2: Plugin name, 3: Five stars, 4: Close paragraph tag. */
 				esc_html__( '%1$sIf you like %2$s please leave us a %3$s rating to help us spread the word!%4$s', 'wp-footer-rate' ),
 				sprintf( '<p id="wp-footer-rate-rating" class="%s">', esc_attr( $class_name ) ),
 				sprintf( '<strong>%s</strong>', esc_html( $this->name ) ),
-				'<a href="https://wordpress.org/support/' . esc_html( $this->type ) . '/' . esc_html( $this->slug ) . '/reviews?filter=5#new-post" target="_blank" id="wp-footer-rate-link" rel="noopener noreferrer nofollow" aria-label="' . esc_attr__( 'five star', 'wp-footer-rate' ) . '" data-rated="' . esc_attr__( 'Thanks :)', 'wp-footer-rate' ) . '">&#9733;&#9733;&#9733;&#9733;&#9733;</a>',
+				'<a href="' . esc_url( $review_url ) . '" target="_blank" id="wp-footer-rate-link" rel="noopener noreferrer nofollow" aria-label="' . esc_attr__( 'five star', 'wp-footer-rate' ) . '" data-rated="' . esc_attr__( 'Thanks :)', 'wp-footer-rate' ) . '">&#9733;&#9733;&#9733;&#9733;&#9733;</a>',
 				'</p>'
 			);
 			?>
